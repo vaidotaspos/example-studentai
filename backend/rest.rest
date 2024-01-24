@@ -1,3 +1,6 @@
 ### Check main page
 GET http://localhost:3000/
 
+
+### Check DB connection
+GET http://localhost:3000/test-connection

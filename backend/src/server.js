@@ -2,8 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-const {mainErrroHandler} = require("./middleware");
-const APIError = require("./apiError/ApiError");
 
 const app = express();
 

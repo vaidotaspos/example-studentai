@@ -4,3 +4,7 @@ GET http://localhost:3000/
 
 ### Check DB connection
 GET http://localhost:3000/test-connection
+
+
+### Get all students
+GET http://localhost:3000/api/students

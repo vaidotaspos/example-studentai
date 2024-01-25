@@ -51,19 +51,38 @@ module.exports = {
         });
     },
     update: async (req, res, next) => {
+        const { id } = req.params;
 
+        const { firstname, lastname, email } = req.body;
+
+        const sql = `UPDATE student SET firstname=?, lastname=?, email=? WHERE id=?`
+
+        const [responseObject, error] = await executeQuery(sql, [firstname, lastname, email, id]);
+
+        if (error) {
+            return next(error);
+        }
+
+        if (responseObject.affectedRows !== 1) {
+            return next(new APIError('something went wrong', 400));
+        }
+
+        res.status(201).json({
+            id: id,
+            message: `Student with id:${id} updated successfully`,
+        });
     },
     delete: async (req, res, next) => {
         const { id } = req.params;
 
         const sql = 'DELETE FROM `student` WHERE id=?';
 
-        const [resObj, error] = await executeQuery(sql, [id]);
+        const [responseObject, error] = await executeQuery(sql, [id]);
         if (error) {
             return next(error);
         }
 
-        if (resObj.affectedRows !== 1) {
+        if (responseObject.affectedRows !== 1) {
             return next(new APIError('something went wrong', 400));
         }
 

@@ -12,3 +12,27 @@ GET http://localhost:3000/api/students
 
 ### Get single student
 GET http://localhost:3000/api/students/2
+
+
+### POST create student
+POST http://localhost:3000/api/students/
+Content-Type: application/json
+
+{
+  "firstname": "Moe",
+  "lastname": "Deo",
+  "email": "moe@bit.lt"
+}
+
+### Update single student
+PUT http://localhost:3000/api/students/4
+Content-Type: application/json
+
+{
+  "firstname": "Vardenis",
+  "lastname": "Pavardenis",
+  "email": "moe@bit.lt"
+}
+
+### DELETE single student
+DELETE http://localhost:3000/api/students/5

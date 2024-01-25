@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const { mainErrorHandler } = require('./middleware');
 const studentRouter = require('./routes/studentRoutes');
 
 const {executeQuery} = require('./helpers');
@@ -30,6 +31,8 @@ app.get('/test-connection', async (req, res) => {
 
    res.json(students);
 });
+
+app.use(mainErrorHandler);
 
 app.listen(port, () => {
    console.log(`Server is listening on port ${port}`)

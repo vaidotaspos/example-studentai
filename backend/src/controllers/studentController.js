@@ -17,7 +17,17 @@ module.exports = {
         res.json(items);
     },
     single: async (req, res, next) => {
+        const { id } = req.params;
 
+        const sql = "SELECT * FROM student WHERE id=?";
+
+        const [items, error] = await executeQuery(sql, [id]);
+
+        if (error) {
+            return next(error);
+        }
+
+        res.json(items[0]);
     },
     create: async (req, res, next) => {
 

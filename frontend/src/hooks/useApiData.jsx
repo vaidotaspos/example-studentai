@@ -9,7 +9,6 @@ export default function useApiData(apiUrl, initValue = []) {
         axios
             .get(apiUrl)
             .then((response) => {
-                console.log('Response: ', response.data);
                 setDataArray(response.data)
             })
             .catch((error) => {

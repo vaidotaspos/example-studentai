@@ -1,7 +1,8 @@
 import useApiData from "../../hooks/useApiData.jsx";
+import {baseApiUrl} from "../../helper.js";
 
 export default function ListPage() {
-    const [studentList, setStudentList] = useApiData('http://localhost:3000/api/students');
+    const [studentList, setStudentList] = useApiData(`${baseApiUrl}students`);
 
     return (
         <div className='container mx-auto p-4'>

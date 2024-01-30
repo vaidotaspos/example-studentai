@@ -42,6 +42,16 @@ POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-  "email": "vaidotas@gmail.com",
+  "email": "vaidotass@gmail.com",
+  "password": "labaisunkusslaptazodis"
+}
+
+
+### POST Login User
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "vaidotass@gmail.com",
   "password": "labaisunkusslaptazodis"
 }

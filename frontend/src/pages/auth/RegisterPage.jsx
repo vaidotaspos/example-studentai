@@ -1,19 +1,44 @@
 import {useFormik} from "formik";
 import * as Yup from 'yup';
+import axios from "axios";
+import {baseApiUrl} from "../../helper.js";
+import toast from "react-hot-toast";
+import {useNavigate} from "react-router-dom"
 
 export default function RegisterPage() {
+    const  navigate = useNavigate();
+
     const formik = useFormik({
        initialValues: {
-
+           email: '',
+           password: '',
+           password_confirm: '',
        },
         validationSchema: Yup.object({
-
+            email: Yup.string().email().min(3).max(128).required('El. paštas privalomas laukas'),
+            password: Yup.string().min(3).max(64).required('Slaptažodis privalomas laukas'),
+            password_confirm: Yup.string().required('Pakartotinas slaptažodis privalomas laukas').oneOf([Yup.ref('password'), null], 'Slaptažodžiai turi sutapti')
         }),
         onSubmit: (values) => {
-
+           sendAxiosPost({
+               email: values.email,
+               password: values.password
+           })
         }
     });
 
+    function sendAxiosPost(data) {
+        axios
+            .post(`${baseApiUrl}/auth/register`, data)
+            .then((response) => {
+                formik.resetForm();
+                navigate('/');
+                toast.success('Vartotojas sėkmingai sukurtas');
+            })
+            .catch((error) => {
+                toast.error(error.response.data.error);
+            })
+    }
 
     return (
         <div className="container mx-auto mt-5">

@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const { mainErrorHandler } = require('./middleware');
 const studentRouter = require('./routes/studentRoutes');
+const authRouter = require('./routes/authRoutes');
 
 const {executeQuery} = require('./helpers');
 
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 
 // Isidedame routus is router failu
 app.use('/api', studentRouter);
+app.use('/api', authRouter);
 
 app.get('/test-connection', async (req, res) => {
    const sql = "SELECT * FROM student";

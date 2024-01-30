@@ -36,3 +36,12 @@ Content-Type: application/json
 
 ### DELETE single student
 DELETE http://localhost:3000/api/students/5
+
+### POST Register User
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "vaidotas@gmail.com",
+  "password": "labaisunkusslaptazodis"
+}

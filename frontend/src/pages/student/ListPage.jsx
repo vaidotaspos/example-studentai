@@ -9,13 +9,15 @@ export default function ListPage() {
 
     const navigate = useNavigate();
 
-    function deleteStudent(id) {
+    const deleteStudent = async (studentId) => {
         axios
-            .delete(`${baseApiUrl}students/${id}`)
+            .delete(`${baseApiUrl}students/${studentId}`)
             .then((response) => {
                 navigate('/list-student');
-                toast.success(`Studentas ID: ${id} sėkmingai ištrintas!`);
-                //setStudentList(useApiData(`${baseApiUrl}students`));
+                toast.success(`Studentas ID: ${studentId} sėkmingai ištrintas!`);
+
+                const list = studentList.filter(student => student.id !== studentId); //only remove the selected row
+                setStudentList(list);
             })
             .catch((error) => {
                 toast.error(error.response.data.error);

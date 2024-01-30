@@ -6,4 +6,4 @@
 5. `npm install cors` CORS biblioteka
 6. `npm install mysql2` MYSQL biblioteka skirta sukurti ryšiui tarp aplikacijos ir duomenu bazes
 7. `npm install morgan` Middleware skirtas HTTP užklausom suloginti
-8. 
+8. `npm i bcrypt` Bibilioteka skirta duomenu užšifravimui

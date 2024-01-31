@@ -3,9 +3,12 @@ import {baseApiUrl} from "../../helper.js";
 import {Link, useNavigate} from "react-router-dom"
 import axios from "axios";
 import toast from "react-hot-toast";
+import {useAuthContext} from "../../store/AuthCtxProvider.jsx";
 
 export default function ListPage() {
     const [studentList, setStudentList] = useApiData(`${baseApiUrl}students`);
+
+    const {isUserAdmin, isUserLoggedIn} = useAuthContext();
 
     const navigate = useNavigate();
 
@@ -47,18 +50,25 @@ export default function ListPage() {
                             <td className="border px-4 py-2">{studentas.lastname}</td>
                             <td className="border px-4 py-2">{studentas.email}</td>
                             <td className="border px-4 py-2">
-                                <Link
-                                    to={`/edit-student/${studentas.id}`}
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                >
-                                    Redaguoti
-                                </Link>
-                                <button
-                                    className="bg-red-500 hover:bg-red-400 text-white font-bold ml-2 py-2 px-4 rounded"
-                                    onClick={ () => deleteStudent(studentas.id) }
-                                >
-                                    Ištrinti
-                                </button>
+                                { isUserLoggedIn && (
+                                    <>
+                                        <Link
+                                            to={`/edit-student/${studentas.id}`}
+                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                        >
+                                            Redaguoti
+                                        </Link>
+
+                                        { isUserAdmin && (
+                                            <button
+                                                className="bg-red-500 hover:bg-red-400 text-white font-bold ml-2 py-2 px-4 rounded"
+                                                onClick={() => deleteStudent(studentas.id)}
+                                            >
+                                                Ištrinti
+                                            </button>
+                                        )}
+                                    </>
+                                )}
                             </td>
                         </tr>
                     ))}

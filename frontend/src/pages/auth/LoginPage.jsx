@@ -1,39 +1,37 @@
 import {useFormik} from "formik";
 import * as Yup from 'yup';
 import axios from "axios";
-import {baseApiUrl} from "../../helper.js";
 import toast from "react-hot-toast";
-import {useNavigate} from "react-router-dom"
+import {baseApiUrl} from "../../helper.js";
+import {useNavigate} from "react-router-dom";
+import {useAuthContext} from "../../store/AuthCtxProvider.jsx";
 
-export default function RegisterPage() {
-    const  navigate = useNavigate();
+export default function LoginPage() {
+    const navigate = useNavigate();
+
+    const { login } = useAuthContext();
 
     const formik = useFormik({
-       initialValues: {
-           email: '',
-           password: '',
-           password_confirm: '',
-       },
+        initialValues: {
+            email: '',
+            password: ''
+        },
         validationSchema: Yup.object({
-            email: Yup.string().email().min(3).max(128).required('El. paštas privalomas laukas'),
-            password: Yup.string().min(3).max(64).required('Slaptažodis privalomas laukas'),
-            password_confirm: Yup.string().required('Pakartotinas slaptažodis privalomas laukas').oneOf([Yup.ref('password'), null], 'Slaptažodžiai turi sutapti')
+            email: Yup.string().email().min(3).max(128).required(),
+            password: Yup.string().min(3).max(64).required()
         }),
         onSubmit: (values) => {
-           sendAxiosPost({
-               email: values.email,
-               password: values.password
-           })
+            sendPostData(values);
         }
-    });
+    })
 
-    function sendAxiosPost(data) {
+    function sendPostData(data) {
         axios
-            .post(`${baseApiUrl}auth/register`, data)
+            .post(`${baseApiUrl}auth/login`, data)
             .then((response) => {
-                formik.resetForm();
+                toast.success('Sėkmingai prisijungtą prie sistemos');
+                login(data.email, response.data.token);
                 navigate('/');
-                toast.success('Vartotojas sėkmingai sukurtas');
             })
             .catch((error) => {
                 toast.error(error.response.data.error);
@@ -42,8 +40,7 @@ export default function RegisterPage() {
 
     return (
         <div className="container mx-auto mt-5">
-            <h1 className="text-3xl my-5">Vartotojo registracijos puslapis</h1>
-
+            <h1 className="text-3xl my-5">Prisijungimo puslapis</h1>
             <form className='w-full mx-auto max-w-sm' onSubmit={formik.handleSubmit}>
                 <div className='mb-8'>
                     <label
@@ -65,6 +62,7 @@ export default function RegisterPage() {
                         <p className='text-red-600'>{formik.errors['email']}</p>
                     )}
                 </div>
+
                 <div className="mb-8">
                     <label
                         htmlFor="password"
@@ -85,26 +83,7 @@ export default function RegisterPage() {
                         <p className='text-red-600'>{formik.errors['password']}</p>
                     )}
                 </div>
-                <div className="mb-8">
-                    <label
-                        htmlFor="password-confirm"
-                        className="block text-gray-700 text-sm font-bold mb-2"
-                    >
-                        Slaptažodžio pakartojimas
-                    </label>
-                    <input
-                        type="password"
-                        id="password-confirm"
-                        name="password_confirm"
-                        value={formik.values['password_confirm']}
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-                    />
-                    {formik.touched['password_confirm'] && formik.errors['password_confirm'] && (
-                        <p className='text-red-600'>{formik.errors['password_confirm']}</p>
-                    )}
-                </div>
+
                 <div className='flex items-center justify-center'>
                     <button
                         type='submit'
@@ -115,6 +94,5 @@ export default function RegisterPage() {
                 </div>
             </form>
         </div>
-    )
-        ;
+    );
 }

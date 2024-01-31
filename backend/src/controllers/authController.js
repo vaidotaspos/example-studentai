@@ -1,10 +1,8 @@
 require('dotenv').config();
 
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const {executeQuery} = require("../helpers");
+const {executeQuery, signJWTToken} = require("../helpers");
 const APIError = require('../apiError/ApiError');
-const {jwtSecret} = require('../config')
 
 const login = async (req, res, next) => {
     const {email, password} = req.body;
@@ -28,17 +26,20 @@ const login = async (req, res, next) => {
         return next(new APIError('Password or email not matched', 401));
     }
 
-    const token = jwt.sign({
-        id: userFound.id,
-        email: userFound.email,
-        scope: userFound.scope
-    }, jwtSecret, {
-        expiresIn: '1h'
-    });
+    const data = {
+        sub: userFound.id,
+        user: {
+            id: userFound.id,
+            email: userFound.email,
+            scope: userFound.scope
+        }
+    };
+
+    const token = signJWTToken(data);
 
     res.json({
         message: 'Login Success',
-        token
+        token,
     })
 
     res.end();

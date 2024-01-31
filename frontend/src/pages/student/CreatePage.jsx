@@ -4,9 +4,12 @@ import axios from "axios";
 import {baseApiUrl} from "../../helper.js";
 import toast from "react-hot-toast";
 import {useNavigate} from "react-router-dom";
+import {useAuthContext} from "../../store/AuthCtxProvider.jsx";
 
 export default function CreatePage() {
-    const  navigate = useNavigate();
+    const navigate = useNavigate();
+
+    const {token} = useAuthContext();
 
     const formik = useFormik({
         initialValues: {
@@ -26,7 +29,9 @@ export default function CreatePage() {
 
     function sendPostData(data) {
         axios
-            .post(`${baseApiUrl}students`, data)
+            .post(`${baseApiUrl}students`, data, {
+                headers: {'Authorization': token}
+            })
             .then((response) => {
                 navigate('/list-student');
                 toast.success('Naujas studentas sėkmingai pridėtas');

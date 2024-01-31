@@ -8,13 +8,15 @@ import {useAuthContext} from "../../store/AuthCtxProvider.jsx";
 export default function ListPage() {
     const [studentList, setStudentList] = useApiData(`${baseApiUrl}students`);
 
-    const {isUserAdmin, isUserLoggedIn} = useAuthContext();
+    const {isUserAdmin, isUserLoggedIn, token} = useAuthContext();
 
     const navigate = useNavigate();
 
     const deleteStudent = async (studentId) => {
         axios
-            .delete(`${baseApiUrl}students/${studentId}`)
+            .delete(`${baseApiUrl}students/${studentId}`, {
+                headers: {'Authorization': token}
+            })
             .then((response) => {
                 navigate('/list-student');
                 toast.success(`Studentas ID: ${studentId} sėkmingai ištrintas!`);

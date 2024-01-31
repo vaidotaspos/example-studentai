@@ -6,9 +6,12 @@ import {useParams} from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
 import {useNavigate} from "react-router-dom";
+import {useAuthContext} from "../../store/AuthCtxProvider.jsx";
 
 export default function EditPage() {
     const { id } = useParams();
+
+    const {token} = useAuthContext();
 
     const navigate = useNavigate();
 
@@ -37,7 +40,9 @@ export default function EditPage() {
 
     function sendPutData(data) {
         axios
-            .put(`${baseApiUrl}students/${id}`, data)
+            .put(`${baseApiUrl}students/${id}`, data, {
+                headers: {'Authorization': token}
+            })
             .then((response) => {
                 navigate('/list-student');
                 toast.success('Studento informacija sėkmingai atnaujinta!');

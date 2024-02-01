@@ -4,9 +4,12 @@ import {jwtDecode} from "jwt-decode";
 const AuthContext = createContext({
     token: '',
     user: {},
+    userId: '',
     email: '',
-    login(email, token) {},
-    logout() {},
+    login(email, token) {
+    },
+    logout() {
+    },
     isUserLoggedIn: false,
     isUserAdmin: false
 });
@@ -15,6 +18,7 @@ export default function AuthCtxProvider({children}) {
     const [authState, setAuthState] = useState({
         token: '',
         email: '',
+        userId: '',
         user: {}
     });
 
@@ -24,15 +28,17 @@ export default function AuthCtxProvider({children}) {
         setAuthState({
             token: token,
             email: email,
+            userId: tokenData.user.id,
             user: tokenData.user
         })
     }
 
     function logout() {
         setAuthState({
-           token: '',
-           email: '',
-           user: {}
+            token: '',
+            email: '',
+            userId: '',
+            user: {}
         });
     }
 
@@ -49,6 +55,7 @@ export default function AuthCtxProvider({children}) {
         isUserAdmin,
         token: authState.token,
         email: authState.email,
+        userId: authState.userId,
         user: authState.user,
         login,
         logout

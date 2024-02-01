@@ -5,8 +5,9 @@ import {baseApiUrl} from "../../helper.js";
 import toast from "react-hot-toast";
 import {useNavigate} from "react-router-dom";
 import {useAuthContext} from "../../store/AuthCtxProvider.jsx";
+import StudentListPage from "./ListPage.jsx";
 
-export default function CreatePage() {
+export default function StudentCreatePage() {
     const navigate = useNavigate();
 
     const {token} = useAuthContext();

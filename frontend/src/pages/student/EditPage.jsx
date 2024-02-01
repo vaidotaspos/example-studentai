@@ -7,8 +7,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import {useNavigate} from "react-router-dom";
 import {useAuthContext} from "../../store/AuthCtxProvider.jsx";
+import StudentListPage from "./ListPage.jsx";
 
-export default function EditPage() {
+export default function StudentEditPage() {
     const { id } = useParams();
 
     const {token} = useAuthContext();

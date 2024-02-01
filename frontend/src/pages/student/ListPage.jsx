@@ -6,8 +6,8 @@ import toast from "react-hot-toast";
 import {useAuthContext} from "../../store/AuthCtxProvider.jsx";
 import {useMemo, useState} from "react";
 
-export default function ListPage() {
-    const [filterValue, setFilterValue] = useState('')
+export default function StudentListPage() {
+    const [filterValue, setFilterValue] = useState('');
 
     const [studentList, setStudentList] = useApiData(`${baseApiUrl}students`);
 

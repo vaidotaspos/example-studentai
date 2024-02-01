@@ -8,7 +8,7 @@ module.exports = {
     all: async (req, res, next) => {
         console.log('HERE')
         // Apsirasome SQL uzklausa
-        const sql = `SELECT * FROM user`;
+        const sql = 'SELECT `id`, `email`, `scope`, `verified` FROM `user`';
 
         // Ivykdome parasyta uzklausa
         const [items, error] = await executeQuery(sql);

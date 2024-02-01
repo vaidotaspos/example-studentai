@@ -2,11 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-const { mainErrorHandler } = require('./middleware');
+const { mainErrorHandler, validateJWTToken } = require('./middleware');
 const studentRouter = require('./routes/studentRoutes');
 const authRouter = require('./routes/authRoutes');
+const userRouter = require("./routes/userRoutes");
 
 const {executeQuery} = require('./helpers');
+
 
 const app = express();
 
@@ -26,6 +28,7 @@ app.get('/', (req, res) => {
 // Isidedame routus is router failu
 app.use('/api', studentRouter);
 app.use('/api', authRouter);
+app.use('/api', validateJWTToken, userRouter);
 
 app.get('/test-connection', async (req, res) => {
    const sql = "SELECT * FROM student";

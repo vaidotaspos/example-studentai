@@ -14,12 +14,29 @@ const AuthContext = createContext({
     isUserAdmin: false
 });
 
+function parseJWTTokenData (token) {
+    if (!token) return {};
+    const tokenData = jwtDecode(token);
+
+    const dateNow = Date.now() / 1000;
+    const expire = token.exp + token.iat;
+
+    if (dateNow > expire) {
+        localStorage.removeItem('token')
+        return {};
+    }
+
+    return {...tokenData, token: token};
+}
+
 export default function AuthCtxProvider({children}) {
+    let tokenData = parseJWTTokenData(localStorage.getItem('token'))
+
     const [authState, setAuthState] = useState({
-        token: '',
-        email: '',
-        userId: '',
-        user: {}
+        token: tokenData?.token || '',
+        email: tokenData?.user?.email || '',
+        userId: tokenData?.sub || '',
+        user: tokenData?.user || {}
     });
 
     function login(email, token) {
@@ -31,6 +48,8 @@ export default function AuthCtxProvider({children}) {
             userId: tokenData.user.id,
             user: tokenData.user
         })
+
+        localStorage.setItem('token', token);
     }
 
     function logout() {
@@ -40,6 +59,8 @@ export default function AuthCtxProvider({children}) {
             userId: '',
             user: {}
         });
+
+        localStorage.removeItem('token');
     }
 
     const isUserLoggedIn = !!authState.token;

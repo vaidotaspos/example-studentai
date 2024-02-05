@@ -7,7 +7,7 @@ const APIError = require('../apiError/ApiError');
 const login = async (req, res, next) => {
     const {email, password} = req.body;
 
-    const sql = 'SELECT * FROM `user` WHERE `email` = ?';
+    const sql = 'SELECT * FROM `user` WHERE `email` = ? AND `verified` = 1 ';
     const [responseObject, error] = await executeQuery(sql, [email]);
 
     if (error) {
@@ -15,7 +15,7 @@ const login = async (req, res, next) => {
     }
 
     if (responseObject.length === 0) {
-        return next(new APIError('User not found', 400));
+        return next(new APIError('User not found or not verified', 400));
     }
 
     const userFound = responseObject[0];

@@ -7,7 +7,7 @@ import {useAuthContext} from "../../store/AuthCtxProvider.jsx";
 import {useMemo, useState} from "react";
 
 export default function UserListPage() {
-    const [userList, setUserList] = useApiData(`${baseApiUrl}user`);
+    const [userList, setUserList] = useApiData(`${baseApiUrl}users`);
 
     const [filterValue, setFilterValue] = useState('');
 
@@ -15,7 +15,7 @@ export default function UserListPage() {
 
     const deleteUser = async (id) => {
         axios
-            .delete(`${baseApiUrl}user/${id}`, {
+            .delete(`${baseApiUrl}users/${id}`, {
                 headers: {'Authorization': token}
             })
             .then((response) => {
@@ -63,30 +63,28 @@ export default function UserListPage() {
                     </tr>
                     </thead>
                     <tbody>
-                    {filteredUsers.map((user) => (
-                        <tr key={user.id} className="bg-gray-200">
-                            <td className="border px-4 py-2">{user.id}</td>
-                            <td className="border px-4 py-2">{user.email}</td>
-                            <td className="border px-4 py-2 capitalize">{user.scope}</td>
-                            <td className="border px-4 py-2">{user.verified ? 'Taip' : 'Ne'}</td>
-                            <td className="border px-4 py-2">
-                                <Link
-                                    to={`/edit-user/${user.id}`}
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                >
-                                    Redaguoti
-                                </Link>
-                                {userId !== user.id && (
+                    {filteredUsers.map((user) => ( userId !== user.id &&
+                            <tr key={user.id} className="bg-gray-200">
+                                <td className="border px-4 py-2">{user.id}</td>
+                                <td className="border px-4 py-2">{user.email}</td>
+                                <td className="border px-4 py-2 capitalize">{user.scope}</td>
+                                <td className="border px-4 py-2">{user.verified ? 'Taip' : 'Ne'}</td>
+                                <td className="border px-4 py-2">
+                                    <Link
+                                        to={`/edit-user/${user.id}`}
+                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                    >
+                                        Redaguoti
+                                    </Link>
                                     <button
                                         className="bg-red-500 hover:bg-red-400 text-white font-bold ml-2 py-2 px-4 rounded"
                                         onClick={() => deleteUser(user.id)}
                                     >
                                         Ištrinti
                                     </button>
-                                )}
-                            </td>
-                        </tr>
-                    ))}
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

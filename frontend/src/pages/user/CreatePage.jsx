@@ -3,7 +3,7 @@ import {useAuthContext} from "../../store/AuthCtxProvider.jsx";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import {baseApiUrl} from "../../helper.js";
+import {baseApiUrl, roles} from "../../helper.js";
 import toast from "react-hot-toast";
 import Select from 'react-select';
 
@@ -13,10 +13,7 @@ export default function UserCreatePage() {
 
     const {token} = useAuthContext();
 
-    const options = [
-        { value: 'admin', label: 'Admin' },
-        { value: 'manager', label: 'Manager' }
-    ]
+    const options = roles;
 
     const formik = useFormik({
         initialValues: {
@@ -38,7 +35,7 @@ export default function UserCreatePage() {
 
     function sendPostData(data) {
         axios
-            .post(`${baseApiUrl}user`, data, {
+            .post(`${baseApiUrl}users`, data, {
                 headers: {'Authorization': token}
             })
             .then((response) => {

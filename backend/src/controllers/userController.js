@@ -24,7 +24,7 @@ module.exports = {
     single: async (req, res, next) => {
         const { id } = req.params;
 
-        const sql = "SELECT * FROM user WHERE id=?";
+        const sql = "SELECT `id`, `email`, `scope`, `verified` FROM user WHERE id=?";
 
         const [items, error] = await executeQuery(sql, [id]);
 
@@ -62,11 +62,22 @@ module.exports = {
 
         const { email, password, scope, verified } = req.body;
 
-        const sql = `UPDATE user SET email=?, password=?, scope=?, verified=? WHERE id=?`
+        let data, sql;
+        if (password !== '') {
+            const passwordHash = bcrypt.hashSync(password, +salt);
+            sql = `UPDATE user SET email=?, password=?, scope=?, verified=? WHERE id=?`;
+            data = [email, passwordHash, scope, verified, id];
+        } else {
+            sql = `UPDATE user SET email=?, scope=?, verified=? WHERE id=?`;
+            data = [
+                email, scope, verified, id
+            ];
+        }
 
-        const passwordHash = bcrypt.hashSync(password, +salt);
+        console.log('SQL === ', sql);
+        console.log('Data === ', data);
 
-        const [responseObject, error] = await executeQuery(sql, [email, passwordHash, scope, verified, id]);
+        const [responseObject, error] = await executeQuery(sql, data);
 
         if (error) {
             return next(error);

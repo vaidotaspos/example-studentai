@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 30, 2024 at 10:07 AM
+-- Generation Time: Feb 05, 2024 at 11:27 AM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.1.33
 
@@ -41,8 +41,8 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`id`, `firstname`, `lastname`, `email`, `created_at`) VALUES
-(1, 'Vardenis', 'Pavardenis', 'moe@bit.lt', '2024-01-24 11:37:21'),
-(9, 'Vaidotas', 'Testinis', 'vaidotas@test.com', '2024-01-29 11:08:56');
+(1, 'Vaidotas', 'Poskus', 'vaidotas@bit.lt', '2024-01-24 11:37:21'),
+(2, 'Jonas', 'Jonaitis', 'jonas@bit.lt', '2024-01-31 11:28:36');
 
 -- --------------------------------------------------------
 
@@ -55,8 +55,18 @@ CREATE TABLE `user` (
   `email` varchar(128) NOT NULL,
   `password` varchar(255) NOT NULL,
   `scope` varchar(16) NOT NULL,
+  `verified` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `email`, `password`, `scope`, `verified`, `created_at`) VALUES
+(1, 'vaidotass@gmail.com', '$2b$10$ST9gDEfJP6pNZUE8ln2WsOXHQonz9YOH2e4h/O0TLwfS025IJ7Kz.', 'admin', 1, '2024-01-30 10:03:01'),
+(2, 'manager@bit.lt', '$2b$10$YJ6O3kKRvrh8lz/1SnryDebcI5vK0EtsGtWUVwqY65THK1vQZ9xFS', 'manager', 1, '2024-02-05 09:22:15'),
+(3, 'user@bit.lt', '$2b$10$C21IRo60jVkndYvUQ9HRMuYwQkvCumdLKQffve3MkSkuitY1G70HO', 'manager', 0, '2024-02-05 10:24:19');
 
 --
 -- Indexes for dumped tables
@@ -72,7 +82,8 @@ ALTER TABLE `student`
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -82,13 +93,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

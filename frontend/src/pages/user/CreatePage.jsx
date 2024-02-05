@@ -23,13 +23,13 @@ export default function UserCreatePage() {
             email: '',
             password: '',
             scope: '',
-            verified: 1,
+            verified: false,
         },
         validationSchema: Yup.object({
             email: Yup.string().email().min(3).max(128).required('El. paštas privalomas laukas'),
             password: Yup.string().min(3).max(64).required('Slaptažodis privalomas laukas'),
-            scope: Yup.string().oneOf(["admin", "manager"]).required(),
-            verified: Yup.boolean()
+            scope: Yup.string().oneOf(Array.from(options, (option) => option.value)).required(),
+            verified: Yup.bool()
         }),
         onSubmit: (values) => {
             sendPostData(values)
@@ -43,7 +43,7 @@ export default function UserCreatePage() {
             })
             .then((response) => {
                 navigate('/list-user');
-                toast.success('Naujas Vartotojas sėkmingai pridėtas');
+                toast.success(response.data.message);
             })
             .catch((error) => {
                 toast.error(error.response.data.error);
@@ -106,7 +106,9 @@ export default function UserCreatePage() {
                         name='scope'
                         id='scope'
                         options={options}
-                        placeholder="Pasirinkite role"
+                        placeholder="Pasirinkite rolę"
+                        onBlur={formik.handleBlur}
+                        onChange={(option) => formik.setFieldValue('scope', option.value)}
                         className='appearance-none rounded w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                     />
                     {formik.touched['scope'] && formik.errors['scope'] && (
@@ -124,7 +126,7 @@ export default function UserCreatePage() {
                         type="checkbox"
                         id="verified"
                         name="verified"
-                        value="1"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
                     />
